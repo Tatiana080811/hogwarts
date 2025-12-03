@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SchoolApplication {
 
-    private SchoolApplication() {
+    public SchoolApplication() {
     }
 
     public static void main(String[] args) {

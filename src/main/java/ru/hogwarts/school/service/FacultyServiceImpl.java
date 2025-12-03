@@ -1,66 +1,58 @@
 package ru.hogwarts.school.service;
 
-import ru.hogwarts.school.model.Faculty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repositories.FacultyRepository;
 
-import java.util.HashMap;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@EnableJpaRepositories
 public class FacultyServiceImpl implements FacultyService {
-    private final Map<Long, Faculty> faculties = new HashMap<>();
-    private long count = 0;
+
+    @Autowired
+    private final FacultyRepository facultyRepository;
+
+    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     @Override
     public Faculty addFaculty(Faculty faculty) {
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     @Override
     public Faculty findFaculty(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     @Override
-    public Faculty editFaculty(Long id, Faculty faculty) {
-        if (!faculties.containsKey(id)) {
-            throw new IllegalArgumentException("Факультет с указанным ID не найден");
+    public Faculty editFaculty(Long id, Faculty updatedFaculty) {
+        if (!facultyRepository.existsById(id)) {
+            throw new IllegalArgumentException("Факультет с таким ID не найден.");
         }
-        faculties.put(id, faculty);
-        return faculty;
+        updatedFaculty.setId(id);
+        return facultyRepository.save(updatedFaculty);
     }
 
+    @Transactional
     @Override
     public boolean deleteFaculty(Long id) {
-        return faculties.remove(id) != null;
+        if (!facultyRepository.existsById(id)) {
+            return false;
+        }
+        facultyRepository.deleteById(id);
+        return true;
     }
-
-    public void createFaculty(String name, String color) {
-        long currentId = ++count;
-        var faculty = new Faculty(name, currentId, color);
-        faculties.put(faculty.getId(), faculty);
-    }
-
-    public Faculty readFaculty(Long id) {
-        return faculties.get(id);
-    }
-
-    public void updateFaculty(Long id, String name, String color) {
-        if (!faculties.containsKey(id)) throw new IllegalArgumentException("Факультет с указанным ID не найден");
-        var updatedFaculty = new Faculty(name, id, color);
-        faculties.put(id, updatedFaculty);
-    }
-
-    public int countFaculties() {
-        return faculties.size();
-    }
-
     public List<Faculty> findByColor(String color) {
-        return faculties.values().stream()
-                .filter(f -> f.getColor().equals(color))
+        return facultyRepository.findAll().stream()
+                .filter(faculty -> faculty.getColor().equals(color))
                 .collect(Collectors.toList());
-    }
 }
+    }

@@ -1,7 +1,6 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repositories.FacultyRepository;
@@ -11,10 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@EnableJpaRepositories
 public class FacultyServiceImpl implements FacultyService {
 
-    @Autowired
     private final FacultyRepository facultyRepository;
 
     public FacultyServiceImpl(FacultyRepository facultyRepository) {
@@ -50,9 +47,10 @@ public class FacultyServiceImpl implements FacultyService {
         facultyRepository.deleteById(id);
         return true;
     }
+
     public List<Faculty> findByColor(String color) {
         return facultyRepository.findAll().stream()
                 .filter(faculty -> faculty.getColor().equals(color))
                 .collect(Collectors.toList());
-}
     }
+}

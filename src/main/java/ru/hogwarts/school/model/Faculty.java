@@ -11,10 +11,11 @@ public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
     private String color;
     private String name;
+
+    public Faculty() {
+    }
 
     public Faculty(String name, Long id, String color) {
         this.name = name;

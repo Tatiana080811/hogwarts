@@ -9,5 +9,5 @@ public interface StudentService {
 
     Student editStudent(Long id, Student student);
 
-    void deleteStudent(Long id);
+    boolean deleteStudent(Long id);
 }

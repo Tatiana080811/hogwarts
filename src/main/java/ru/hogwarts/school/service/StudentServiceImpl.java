@@ -36,4 +36,4 @@ public class StudentServiceImpl implements StudentService {
             studentRepository.deleteById(id);
             return true;
         }
-    }
+}

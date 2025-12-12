@@ -1,17 +1,13 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
+import ru.hogwarts.school.repositories.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/faculty")
@@ -52,4 +48,11 @@ public class FacultyController {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/search")
+    public List<Faculty> findFacultiesByNameOrColorContains(
+            @RequestParam(value="query") String query) {
+
+        return facultyService.searchFaculties(query); // Предположим, этот метод реализован в вашем сервисе
+    }
+    
 }

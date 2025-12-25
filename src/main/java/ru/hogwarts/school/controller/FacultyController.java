@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,9 @@ public class FacultyController {
     }
 
     @PostMapping
-    public Faculty createFacultyService(@RequestBody Faculty faculty) {
-        return facultyService.addFaculty(faculty);
+    public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
+        Faculty savedFaculty = facultyService.addFaculty(faculty);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedFaculty);
     }
 
 
@@ -33,14 +35,13 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Faculty> editFaculty(@PathVariable Long id,
-                                               @RequestBody Faculty faculty) {
-        Faculty foundFaculty = facultyService.editFaculty(id, faculty);
-        if (foundFaculty == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Faculty> editFaculty(@PathVariable Long id, @RequestBody Faculty faculty) {
+        Faculty updatedFaculty = facultyService.editFaculty(id, faculty);
+        if (updatedFaculty == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(foundFaculty);
+        return ResponseEntity.ok(updatedFaculty);
     }
 
     @DeleteMapping("/{id}")
@@ -49,10 +50,9 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
     @GetMapping("/search")
-    public List<Faculty> findFacultiesByNameOrColorContains(
-            @RequestParam(value="query") String query) {
+    public List<Faculty> findFacultiesByNameOrColorContains(@RequestParam("query") String query) {
 
-        return facultyService.searchFaculties(query); // Предположим, этот метод реализован в вашем сервисе
+        return facultyService.searchFaculties(query);
     }
     
 }

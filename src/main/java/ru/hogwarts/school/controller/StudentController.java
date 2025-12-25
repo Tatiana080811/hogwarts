@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Student;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.school.repositories.StudentRepository;
+import ru.hogwarts.school.service.StudentService;
 import ru.hogwarts.school.service.StudentServiceImpl;
 
 import java.util.List;
@@ -13,13 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/student")
 public class StudentController {
-    private final StudentServiceImpl studentService;
+    private final StudentService studentService;
 
-    public StudentController(StudentServiceImpl studentService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
     @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
     public Student createStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
     }

@@ -7,9 +7,12 @@ import java.util.Set;
 public class Faculty {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = true)
     private String color;
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "faculty", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -32,20 +35,30 @@ public class Faculty {
         this.color = color;
     }
 
-    @Override
-    public String toString() {
-        return "Faculty{" +
-                "name='" + name + '\'' +
-                ", id=" + id +
-                ", color='" + color + '\'' +
-                '}';
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() {
-        return null;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setId(Long id) {
+        this.id = id;
+    }
+
+        @Override
+        public String toString() {
+            return "Faculty{" +
+                    "name='" + name + '\'' +
+                    ", id=" + id +
+                    ", color='" + color + '\'' +
+                    '}';
+
 
     }
 }

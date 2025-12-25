@@ -9,5 +9,7 @@ public interface StudentService {
 
     Student editStudent(Long id, Student student);
 
+    Student createStudent(Student student);
+
     boolean deleteStudent(Long id);
 }

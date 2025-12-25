@@ -20,11 +20,15 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findStudent(Long id) {
-        return studentRepository.findById(id).get();
+        return studentRepository.findById(id).orElse(null);
     }
 
     @Override
     public Student editStudent(Long id, Student student) {
+        return studentRepository.save(student);
+    }
+    @Override
+    public Student createStudent(Student student) {
         return studentRepository.save(student);
     }
 

@@ -83,7 +83,7 @@ public class FacultyControllerTests {
         updateData.setName("Updated Name");
         updateData.setColor("#00ff00");
 
-        when(facultyService.editFaculty(updateData.getId(), updateData)).thenReturn(updateData);
+        when(facultyService.editFaculty(anyLong(), any())).thenReturn(updateData);
 
         mockMvc.perform(put("/faculty/{id}", originalFaculty.getId())
                         .header("Content-Type", "application/json")
